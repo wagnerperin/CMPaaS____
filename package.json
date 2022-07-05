@@ -1,0 +1,24 @@
+{
+  "name": "cmpaas_project",
+  "version": "0.0.1",
+  "description": "CMPaaS Official Back-End Services",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wagnerperin/CMPaaS.git"
+  },
+  "keywords": [
+    "cmpaas",
+    "lied",
+    "ufes"
+  ],
+  "author": "Wagner de Andrade Perin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wagnerperin/CMPaaS/issues"
+  },
+  "homepage": "https://github.com/wagnerperin/CMPaaS#readme"
+}
