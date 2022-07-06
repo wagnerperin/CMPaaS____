@@ -5,7 +5,7 @@ const consign = require('consign');
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
-consign({cwd:'app', extensions:['.js']})
+consign({cwd:'app'})
   .include('models')
   .then('apis')
   .then('routes')
