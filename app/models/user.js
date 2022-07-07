@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { randomBytes, pbkdf2Sync } = require('crypto');
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -18,6 +19,22 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 6
+  },
+  salt: {
+    type: String
   }
 }, { timestamps: true });
+
+UserSchema.methods.hashPassword = function() {
+  this.salt = randomBytes(16).toString('hex');
+  this.password = pbkdf2Sync(this.password, this.salt, 1000, 64, 'sha512').toString('hex');
+};
+
+UserSchema.pre('save', function(next) {
+  if (this.isModified('password')) {
+    this.hashPassword();
+  }
+  next();
+});
+
 mongoose.model('User', UserSchema);
