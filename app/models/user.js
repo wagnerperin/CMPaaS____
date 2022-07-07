@@ -24,6 +24,12 @@ const UserSchema = new mongoose.Schema({
   salt: {
     type: String,
     select: false
+  },
+  userType: {
+    type: String,
+    required: true,
+    enum: ['admin', 'user'],
+    default: 'user'
   }
 }, { timestamps: true });
 
