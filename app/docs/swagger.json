@@ -64,6 +64,36 @@
             "description": "Internal server error"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user list",
+        "description": "Get the user list.",
+        "operationId": "listUsers",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
       }
     }
   },

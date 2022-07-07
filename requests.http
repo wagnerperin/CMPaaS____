@@ -2,7 +2,9 @@ POST http://localhost:3000/user HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Wagner Perin",
-    "email": "wagnerperin@gmail.com",
-    "password": "123456"
+    "name": "Priscilla Demoner",
+    "email": "priscillanara@hotmail.com",
+    "password": "654321"
 }
+###
+GET http://localhost:3000/user HTTP/1.1
