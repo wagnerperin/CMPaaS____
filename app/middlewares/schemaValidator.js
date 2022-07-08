@@ -1,7 +1,6 @@
 module.exports = app => {
   const _ = require('lodash');
-  const Joi = require('joi');
-  const Schemas = require('./schemas');
+  const Schemas = app.middlewares.schemas;
   
   return (useJoiError = false) => {
     const _useJoiError = _.isBoolean(useJoiError) && useJoiError;
