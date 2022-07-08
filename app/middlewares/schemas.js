@@ -1,5 +1,7 @@
 module.exports = app => {
+  const {userAuthValidationSchema, userValidationSchema} = app.models.user;
   return {
-    '/user': app.models.user
+    '/auth': userAuthValidationSchema,
+    '/user': userValidationSchema
   };
 }

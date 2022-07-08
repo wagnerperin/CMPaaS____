@@ -37,6 +37,11 @@ module.exports = app => {
     next();
   });
 
+  userSchema.methods.isValidPassword = function(password) {
+    const hash = pbkdf2Sync(password, this.salt, 1000, 64, 'sha512').toString('hex');
+    return this.password === hash;
+  };
+
   mongoose.model('User', userSchema);
 
   //userValidationSchema for persistence pourpose
@@ -46,5 +51,11 @@ module.exports = app => {
     password: Joi.string().regex(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!#.])[A-Za-z\d$@$!%*?&.]{8,20}/).required()
   });
 
-  return userValidationSchema;
+  //userAuthValidationSchema for persistence pourpose
+  const userAuthValidationSchema = Joi.object({
+    email: Joi.string().trim().lowercase().email().required(),
+    password: Joi.string().regex(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!#.])[A-Za-z\d$@$!%*?&.]{8,20}/).required()
+  });
+
+  return {userAuthValidationSchema, userValidationSchema};
 }
