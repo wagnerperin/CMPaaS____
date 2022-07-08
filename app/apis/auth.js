@@ -1,4 +1,5 @@
 module.exports = app => {
+  const env = require('../../conf/env.js');
   const jwt = require('jsonwebtoken');
   const userModel = require('mongoose').model('User');
   const api = {};
@@ -13,7 +14,7 @@ module.exports = app => {
       if(!isValid){
         res.status(401).json({error: 'Invalid password'});
       }else{
-        const token = jwt.sign({id: user._id}, process.env.JWT_AUTH_SECRET);
+        const token = jwt.sign({id: user._id}, env.JWT_AUTH_SECRET);
         res.json({'x-access-token': token});
       }
     }

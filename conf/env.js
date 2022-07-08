@@ -8,5 +8,5 @@ module.exports = {
   HOST: process.env.HOST || 'localhost',
   PORT: process.env.PORT || 3000,
   DBURI: process.env.DBURI || 'mongodb://localhost:27017/CMPaaS',
-  JWT_AUTH_SECRET: process.env.APP_SECRET || 'CMPaaS'
+  JWT_AUTH_SECRET: process.env.JWT_AUTH_SECRET || 'CMPaaS'
 }
