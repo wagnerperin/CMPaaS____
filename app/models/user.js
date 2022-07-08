@@ -45,4 +45,4 @@ const UserValidationSchema = Joi.object({
   password: Joi.string().regex(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!#.])[A-Za-z\d$@$!%*?&.]{8,20}/).required()
 });
 
-module.exports = app => UserValidationSchema;
+module.exports = UserValidationSchema;

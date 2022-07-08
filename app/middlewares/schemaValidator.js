@@ -40,7 +40,17 @@ module.exports = app => {
             req.body = value; // Replace req.body with the data after Joi validation
             next();
           }
+        } else {
+          res.status(500).json({
+            status: 'failed',
+            error: 'Error geting the validation schema.'
+          });
         }
+      } else {
+        res.status(500).json({
+          status: 'failed',
+          error: 'Error in validation.'
+        });
       }
     };
   };

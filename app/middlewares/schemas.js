@@ -1,4 +1,4 @@
-module.exports = app => {
-  const userValidationSchema = app.models.user;
-  module.exports = { '/user': userValidationSchema };
-}
+const userValidationSchema = require('../models/user');
+module.exports = {
+  '/user': userValidationSchema
+};
