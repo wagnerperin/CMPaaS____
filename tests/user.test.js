@@ -7,8 +7,11 @@ const clearUserDB = () => {
   return userModel.deleteMany({});
 };
 
-describe('Testing User API', () => {
+describe('User API tests', () => {
   beforeAll(async () => {
+    await clearUserDB();
+  });
+  afterAll(async () => {
     await clearUserDB();
   });
 
@@ -62,8 +65,8 @@ describe('Testing User API', () => {
     expect(res.status).toBe(400);
   });
 });
-describe('Testing User API', () => {
-  test('GET - check if docs is available', async () => {
+describe('Checking docs', () => {
+  test('GET - to check if docs is available', async () => {
     const res = await supertest(app).get('/');
     expect(res.status).toBe(200);
   });

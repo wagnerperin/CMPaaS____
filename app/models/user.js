@@ -1,10 +1,10 @@
 module.exports = app => {
   const mongoose = require('mongoose');
-  const { randomBytes, pbkdf2Sync } = require('crypto');
+  const {randomBytes, pbkdf2Sync} = require('crypto');
   const Joi = require('joi');
 
-  //UserSchema for persistence pourpose
-  const UserSchema = new mongoose.Schema({
+  //userSchema for persistence pourpose
+  const userSchema = new mongoose.Schema({
     name: String,
     email: {
       type: String,
@@ -23,28 +23,28 @@ module.exports = app => {
       enum: ['admin', 'user'],
       default: 'user'
     }
-  }, { timestamps: true });
+  }, {timestamps: true});
 
-  UserSchema.methods.hashPassword = function() {
+  userSchema.methods.hashPassword = function() {
     this.salt = randomBytes(16).toString('hex');
     this.password = pbkdf2Sync(this.password, this.salt, 1000, 64, 'sha512').toString('hex');
   };
 
-  UserSchema.pre('save', function(next) {
+  userSchema.pre('save', function(next) {
     if (this.isModified('password')) {
       this.hashPassword();
     }
     next();
   });
 
-  mongoose.model('User', UserSchema);
+  mongoose.model('User', userSchema);
 
-  //UserValidationSchema for persistence pourpose
-  const UserValidationSchema = Joi.object({
+  //userValidationSchema for persistence pourpose
+  const userValidationSchema = Joi.object({
     name: Joi.string().trim().regex(/^[A-Z]+ [A-Z]+$/i).required(),
     email: Joi.string().trim().lowercase().email().required(),
     password: Joi.string().regex(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!#.])[A-Za-z\d$@$!%*?&.]{8,20}/).required()
   });
 
-  return UserValidationSchema;
+  return userValidationSchema;
 }

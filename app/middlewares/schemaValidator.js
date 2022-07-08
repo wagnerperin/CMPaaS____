@@ -1,6 +1,6 @@
 module.exports = app => {
   const _ = require('lodash');
-  const Schemas = app.middlewares.schemas;
+  const schemas = app.middlewares.schemas;
   
   return (useJoiError = false) => {
     const _useJoiError = _.isBoolean(useJoiError) && useJoiError;
@@ -15,12 +15,12 @@ module.exports = app => {
       const route = req.route.path;
       const method = req.method.toLowerCase();
 
-      if (_.includes(_supportedMethods, method) && _.has(Schemas, route)) {
-        const _schema = _.get(Schemas, route); // get the schema for the route
-        if (_schema) {
-          const { value, error } = _schema.validate(req.body, _validationOptions);
-          if(error) {
-            const JoiError = {
+      if(_.includes(_supportedMethods, method) && _.has(schemas, route)){
+        const _schema = _.get(schemas, route); // get the schema for the route
+        if(_schema){
+          const {value, error} = _schema.validate(req.body, _validationOptions);
+          if(error){
+            const joiError = {
               status: 'failed',
               error: {
                 original: error._object,
@@ -30,22 +30,22 @@ module.exports = app => {
                 }))
               }
             };
-            const CustomError = {
+            const customError = {
               status: 'failed',
               error: 'Invalid request data. Please review request and try again.'
             };
-            res.status(400).json(_useJoiError ? JoiError : CustomError);
-          } else {        
+            res.status(400).json(_useJoiError ? joiError : customError);
+          }else{        
             req.body = value; // Replace req.body with the data after Joi validation
             next();
           }
-        } else {
+        }else{
           res.status(500).json({
             status: 'failed',
             error: 'Error geting the validation schema.'
           });
         }
-      } else {
+      }else{
         res.status(500).json({
           status: 'failed',
           error: 'Error in validation.'
@@ -53,4 +53,4 @@ module.exports = app => {
       }
     };
   };
-};
+}
