@@ -7,70 +7,37 @@ const clearUserDB = () => {
   return userModel.deleteMany({});
 };
 
-describe('User API tests', () => {
-  beforeAll(async () => {
-    await clearUserDB();
-  });
-  afterAll(async () => {
-    await clearUserDB();
-  });
-
+describe('### User API Testing Set ###', () => {
   test('POST - a new valid user', async () => {
     const res = await supertest(app).post('/user').send({
       name: 'Wagner Perin',
-      email: 'wagnerperin@gmail.com',
+      email: 'wagner@cmpaas.org',
       password: 'Abc@123456'
     });
     expect(res.status).toBe(201);
   });
-
-  test('POST - try repeated data', async () => {
-    const res = await supertest(app).post('/user').send({
-      name: 'Wagner Perin',
-      email: 'wagnerperin@gmail.com',
+  test('GET - UserList with Credentials', async () => {
+    const res = await supertest(app).post('/auth').send({
+      email: 'wagner@cmpaas.org',
       password: 'Abc@123456'
     });
-
-    expect(res.status).toBe(400);
-  });
-
-  test('GET - get all users', async () => {
-    const res = await supertest(app).get('/user');
     expect(res.status).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBe(1);
-  });
-
-  test('POST - try to send invalid fields', async () => {
-    const res = await supertest(app).post('/user').send({
-      name: 'Priscilla Demoner',
-      email: 'priscillanara@hotmail.com',
-      password: 'Abc@123456',
-      userType: 'admin'
-    });
-    expect(res.status).toBe(201);
-    const res2 = await supertest(app).get('/user');
+    expect(res.body).toHaveProperty('x-access-token');
+    
+    const res2 = await supertest(app).get('/user').set('x-access-token', res.body['x-access-token']);
     expect(res2.status).toBe(200);
-    expect(Array.isArray(res2.body)).toBe(true);
-    expect(res2.body.length).toBe(2);
-    expect(res2.body[1].userType).toBe('user');
+    expect(res2.body.length).toBe(3);
   });
-  test('POST - try to send invalid content', async () => {
-    const res = await supertest(app).post('/user').send({
-      name: 'Priscilla Demoner',
-      email: 'priscillanara',
-      password: '23432',
-      userType: 'admin'
-    });
-    expect(res.status).toBe(400);
+  test('GET - UserList with Invalid Credentials', async () => {
+    const res = await supertest(app).get('/user').set('x-access-token', 'invalid token');
+    expect(res.status).toBe(401);
   });
-});
-describe('Checking docs', () => {
-  test('GET - to check if docs is available', async () => {
-    const res = await supertest(app).get('/');
-    expect(res.status).toBe(200);
+  test('GET - UserList Without Credentials', async () => {
+    const res = await supertest(app).get('/user');
+    expect(res.status).toBe(401);
   });
 });
 afterAll(async () => {
+  await clearUserDB();
   return await mongo.disconnect();
 });
