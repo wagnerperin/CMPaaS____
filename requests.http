@@ -4,7 +4,8 @@ content-type: application/json
 {
     "name": "Priscilla Demoner",
     "email": "priscillanara@hotmail.com",
-    "password": "654321"
+    "password": "234324",
+    "sss": "admin"
 }
 ###
 GET http://localhost:3000/user HTTP/1.1

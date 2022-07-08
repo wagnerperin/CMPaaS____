@@ -1,24 +1,16 @@
 const mongoose = require('mongoose');
 const { randomBytes, pbkdf2Sync } = require('crypto');
+const Joi = require('joi');
 
+//UserSchema for persistence pourpose
 const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true
-  },
+  name: String,
   email: {
     type: String,
-    required: true,
-    trim: true,
-    lowercase: true,
     unique: true,
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
   },
   password: {
     type: String,
-    required: true,
-    minlength: 6,
     select: false
   },
   salt: {
@@ -27,7 +19,6 @@ const UserSchema = new mongoose.Schema({
   },
   userType: {
     type: String,
-    required: true,
     enum: ['admin', 'user'],
     default: 'user'
   }
@@ -46,3 +37,12 @@ UserSchema.pre('save', function(next) {
 });
 
 mongoose.model('User', UserSchema);
+
+//UserValidationSchema for persistence pourpose
+const UserValidationSchema = Joi.object({
+  name: Joi.string().trim().regex(/^[A-Z]+ [A-Z]+$/i).required(),
+  email: Joi.string().trim().lowercase().email().required(),
+  password: Joi.string().regex(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!#.])[A-Za-z\d$@$!%*?&.]{8,20}/).required()
+});
+
+module.exports = app => UserValidationSchema;

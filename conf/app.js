@@ -7,6 +7,7 @@ app.use(express.json());
 
 consign({cwd:'app'})
   .include('models')
+  .then('middlewares')
   .then('apis')
   .then('routes')
   .then('docs')
