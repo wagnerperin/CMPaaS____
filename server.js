@@ -1,5 +1,5 @@
-const app = require('./conf/app');
 const env = require('./conf/env');
+const app = require('./conf/app');
 const mongo = require('./conf/mongo');
 
 mongo.connect(env.DBURI);
