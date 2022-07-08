@@ -38,6 +38,7 @@ jobs:
       DB_AUTH_SOURCE: ${{ secrets.DB_AUTH_SOURCE }}
       DB_USER: ${{ secrets.DB_USER }}
       DB_PASS: ${{ secrets.DB_PASS }}
+      JWT_AUTH_SECRET: ${{ secrets.JWT_AUTH_SECRET }}
 
     strategy:
       matrix:
@@ -57,5 +58,7 @@ jobs:
         echo DB_AUTH_SOURCE=$DB_AUTH_SOURCE >> .env
         echo DB_USER=$DB_USER >> .env
         echo DB_PASS=$DB_PASS >> .env
+        echo JWT_AUTH_SECRET=$JWT_AUTH_SECRET >> .env
+        
     - run: npm ci
     - run: pm2 restart CMPaaS
