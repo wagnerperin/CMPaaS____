@@ -13,7 +13,18 @@ module.exports = app => {
 
   api.list = async (req, res) => {
     try{
-        const users = await userModel.find({});
+        let {limit = 10, page = 1, q} = req.query;
+        let query = {};
+
+        if(q){
+          query = {
+            $or: [{'name': {'$regex': q, '$options': 'i'}},
+                  {'email': {'$regex': q,'$options': 'i'}}
+            ]
+          }
+        }
+        
+        const users = await userModel.find(query).limit(parseInt(limit)).skip(parseInt(limit * (page - 1))).exec();
         res.json(users);
     }catch(error) {
         res.status(500).json({error});

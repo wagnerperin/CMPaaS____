@@ -18,7 +18,7 @@ module.exports = app => {
 
   api.authenticate = async (req, res) => {
     const {email, password} = req.body;
-    const user = await userModel.findOne({email}).select('+password +salt');
+    const user = await userModel.findOne({email}).select('+password +salt +userType');
 
     if(!user) {
       res.status(401).json({error: 'User not found'});

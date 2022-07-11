@@ -21,7 +21,8 @@ module.exports = app => {
     userType: {
       type: String,
       enum: ['admin', 'user'],
-      default: 'user'
+      default: 'user',
+      select: false
     }
   }, {timestamps: true});
 

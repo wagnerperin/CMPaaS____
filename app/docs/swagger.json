@@ -79,6 +79,29 @@
           "application/json"
         ],
         "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of users to return",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Name/email filtering",
+            "required": false,
+            "type": "string"
+          }
         ],
         "responses": {
           "200": {
