@@ -8,22 +8,12 @@ module.exports = app => {
     req.isAuthenticated = () => req.user ? true : false;
 
     const token = req.headers['x-access-token'];
-
-    return new Promise((resolve, reject) => {
-      if(token) {
-        jwt.verify(token, env.JWT_AUTH_SECRET, (err, decoded) => {
-          if(err) {
-            reject(err);
-          }else{
-            req.user = decoded;
-            resolve(decoded);
-          }
-        });
-      } else {
-        reject({err: 'No token provided'});
-      }
-    });
-  
+    
+    if(token){ 
+      jwt.verify(token, env.JWT_AUTH_SECRET, (_, decoded) => {
+        req.user = decoded; 
+      });  
+    }
   };
 
   api.authenticate = async (req, res) => {
@@ -44,15 +34,10 @@ module.exports = app => {
   };
 
   api.authenticationRequired = async (req, res, next) => {
-    try{
-      await loadToken(req);
+    loadToken(req);
 
-      if(!req.isAuthenticated()) res.status(401).json({error: 'Authentication required'});
-
-      next();
-    }catch{
-      res.status(401).json({error: 'Authentication token required'});
-    }
+    if(!req.isAuthenticated()) res.status(401).json({error: 'Authentication required'});
+    else next();
   };
 
   return api;

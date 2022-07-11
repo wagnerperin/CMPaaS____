@@ -62,6 +62,25 @@ describe('### Auth API Testing Set ###', () => {
     expect(res.status).toBe(401);
     expect(res.body.error).toBe('Invalid password');
   });
+  test('GET - AuthenticationRequired endpoint with Valid Credentials', async () => {
+    const res = await supertest(app).post('/auth').send({
+      email: 'user@cmpaas.org',
+      password: 'Abc@123456'
+    });
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('x-access-token');
+    
+    const res2 = await supertest(app).get('/user').set('x-access-token', res.body['x-access-token']);
+    expect(res2.status).toBe(200);
+  });
+  test('GET - AuthenticationRequired endpoint with Invalid Credentials', async () => {
+    const res = await supertest(app).get('/user').set('x-access-token', 'invalid token');
+    expect(res.status).toBe(401);
+  });
+  test('GET - AuthenticationRequired endpoint without Credentials', async () => {
+    const res = await supertest(app).get('/user');
+    expect(res.status).toBe(401);
+  });
 });
 afterAll(async () => {
   return await mongo.disconnect();
