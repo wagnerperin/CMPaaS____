@@ -4,7 +4,8 @@ module.exports = app => {
 
   api.create = async (req, res) => {
     try{
-        await userModel.create(req.body);
+        let user = await userModel.create(req.body);
+        res.setHeader('Location', `/users/${user._id}`);
         res.sendStatus(201); 
     }catch(error) {
         res.status(400).json({error});
