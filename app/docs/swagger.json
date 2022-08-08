@@ -16,6 +16,10 @@
   "basePath": "/",
   "tags": [
     {
+      "name": "auth",
+      "description": "Authentication api"
+    },
+    {
       "name": "user",
       "description": "Operations about user",
       "externalDocs": {
@@ -28,6 +32,65 @@
     "http"
   ],
   "paths": {
+    "/auth": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Authenticates a user",
+        "description": "Authenticates a user with the given data in the request body.",
+        "operationId": "authenticate",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User information to authenticate",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["email", "password"],
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "User email"
+                },
+                "password": {
+                  "type": "string",
+                  "description": "User password"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "required": ["x-access-token"],
+              "properties": {
+                "x-access-token": {
+                  "type": "string",
+                  "description": "The JWT token"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid user request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/user": {
       "post": {
         "tags": [
@@ -122,65 +185,6 @@
             "api_key": []
           }
         ]
-      }
-    },
-    "/auth": {
-      "post": {
-        "tags": [
-          "auth"
-        ],
-        "summary": "Authenticates a user",
-        "description": "Authenticates a user with the given data in the request body.",
-        "operationId": "authenticate",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "User information to authenticate",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "required": ["email", "password"],
-              "properties": {
-                "email": {
-                  "type": "string",
-                  "description": "User email"
-                },
-                "password": {
-                  "type": "string",
-                  "description": "User password"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "type": "object",
-              "required": ["x-access-token"],
-              "properties": {
-                "x-access-token": {
-                  "type": "string",
-                  "description": "The JWT token"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Invalid user request"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
       }
     }
   },
