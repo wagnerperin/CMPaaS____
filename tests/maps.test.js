@@ -1,8 +1,21 @@
 const supertest = require('supertest');
 const app = require('../server');
 const mongo = require('../conf/mongo');
+const mapModel = require('mongoose').model('Map');;
+const mapVersionModel = require('mongoose').model('MapVersion');;
+
+const clearMapDB = () => {
+    return mapModel.deleteMany({});
+};
+const clearMapVersionDB = () => {
+    return mapVersionModel.deleteMany({});
+};    
 
 describe('### Map API Testing Set ###', () => {
+  afterAll(async () => {
+    await clearMapDB();
+    await clearMapVersionDB();
+ }),
   test('POST - a valid post request', async () => {
     const res = await supertest(app).post('/map').send({
         "title": "Primeiro Mapa",

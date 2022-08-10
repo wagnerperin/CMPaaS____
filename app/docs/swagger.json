@@ -17,15 +17,19 @@
   "tags": [
     {
       "name": "auth",
-      "description": "Authentication api"
-    },
-    {
-      "name": "user",
-      "description": "Operations about user",
+      "description": "Authentication api",
       "externalDocs": {
         "description": "Find out more about our project",
         "url": "http://cmportal.org/about"
       }
+    },
+    {
+      "name": "user",
+      "description": "Operations about user"
+    },
+    {
+      "name": "map",
+      "description": "Operations about map"
     }
   ],
   "schemes": [
@@ -186,6 +190,44 @@
           }
         ]
       }
+    },
+    "/map": {
+      "post": {
+        "tags": [
+          "map"
+        ],
+        "summary": "Creates a new map",
+        "description": "Creates a new map with the given data in the request body.",
+        "operationId": "createMap",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Map object that needs to be created",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Map"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Invalid user request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -214,6 +256,90 @@
       },
       "xml": {
         "name": "User"
+      }
+    },
+    "Map": {
+      "type": "object",
+      "required":[
+        "title", "initial_content"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "keywords": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "author": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "versions": {
+          "type": "array",
+          "description": "Just in get request. Don't send it in post request.",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "initial_content": {
+          "description": "Just in creation post request.",
+          "type": "object",
+          "properties": {
+            "nodeDataArray": {
+              "type": "array",
+              "items":{
+                "type": "object"
+              }
+            },
+            "linkDataArray": {
+              "type": "array",
+              "items":{
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "xml": {
+        "name": "Map"
+      }
+    },
+    "MapVersion": {
+      "type": "object",
+      "required":[
+        "content"
+      ],
+      "properties": {
+        "content": {
+          "type": "object",
+          "properties": {
+            "nodeDataArray": {
+              "type": "array",
+              "items":{
+                "type": "object"
+              }
+            },
+            "linkDataArray": {
+              "type": "array",
+              "items":{
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "xml": {
+        "name": "MapVersion"
       }
     }
   },
